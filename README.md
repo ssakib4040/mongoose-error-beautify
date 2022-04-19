@@ -23,7 +23,7 @@ const mongoose_beautify = require("mongoose-error-beautify");
 
 try {
   const user = new User({
-    // name: "MD",
+    // name: "John",
     // age: 6,
     // password: "123",
   });

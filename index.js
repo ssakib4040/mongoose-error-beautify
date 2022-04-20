@@ -32,4 +32,13 @@ module.exports = function (errorFromMongoose = null) {
   ) {
     return { error: "Invalid object id" };
   }
+
+  // duplicate entry
+  if (
+    errorFromMongoose &&
+    errorFromMongoose.message &&
+    errorFromMongoose.message.match(/E11000/i)
+  ) {
+    return { error: "Duplicate entry" };
+  }
 };

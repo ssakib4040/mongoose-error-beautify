@@ -1,23 +1,35 @@
-module.exports = function (errorFromMongoose = "") {
+module.exports = function (errorFromMongoose = null) {
   if (!errorFromMongoose) return null;
 
-  const processMongooseErrors = JSON.parse(JSON.stringify(errorFromMongoose));
+  // save document error
+  if (errorFromMongoose && errorFromMongoose.errors) {
+    const processMongooseErrors = JSON.parse(JSON.stringify(errorFromMongoose));
 
-  const eachItemArr = [];
+    const eachItemArr = [];
 
-  const propertyNames = Object.entries(processMongooseErrors.errors);
+    const propertyNames = Object.entries(processMongooseErrors.errors);
 
-  propertyNames.forEach((propertyName) => {
-    delete propertyName[1].properties;
-    delete propertyName[1].path;
-    delete propertyName[1].kind;
+    propertyNames.forEach((propertyName) => {
+      delete propertyName[1].properties;
+      delete propertyName[1].path;
+      delete propertyName[1].kind;
 
-    const eachItem = {
-      [propertyName[0]]: propertyName[1].message,
-    };
+      const eachItem = {
+        [propertyName[0]]: propertyName[1].message,
+      };
 
-    eachItemArr.push(eachItem);
-  });
+      eachItemArr.push(eachItem);
+    });
 
-  return eachItemArr;
+    return eachItemArr;
+  }
+
+  // invalid object id detect
+  if (
+    errorFromMongoose &&
+    errorFromMongoose.message &&
+    errorFromMongoose.message.match(/Cast to ObjectId/i)
+  ) {
+    return { error: "Invalid object id" };
+  }
 };

@@ -1,7 +1,7 @@
 {
   "name": "mongoose-error-beautify",
   "description": "A simple module to format mongoose errors with ease",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "main": "index.js",
   "license": "MIT",
   "repository": {

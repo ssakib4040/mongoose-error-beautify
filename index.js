@@ -1,4 +1,4 @@
-module.exports = function (errorFromMongoose = null) {
+module.exports = function (errorFromMongoose = "") {
   if (!errorFromMongoose) return null;
 
   const processMongooseErrors = JSON.parse(JSON.stringify(errorFromMongoose));

@@ -1,23 +1,23 @@
 module.exports = function (text) {
-  let extractValidateError = text.replace("User validation failed: ", "");
+  if (!errorFromMongoose) return null;
 
-  const arrayError = extractValidateError.split(", ");
+  const processMongooseErrors = JSON.parse(JSON.stringify(errorFromMongoose));
 
-  let finalData = [];
+  const eachItemArr = [];
 
-  arrayError.map((e) => {
-    const message = e.split(":");
-    // console.log(message[1]);
+  const propertyNames = Object.entries(processMongooseErrors.errors);
 
-    const key = message[0];
-    const value = message[1];
+  propertyNames.forEach((propertyName) => {
+    delete propertyName[1].properties;
+    delete propertyName[1].path;
+    delete propertyName[1].kind;
 
-    const data = {
-      [key]: value.trim(),
+    const eachItem = {
+      [propertyName[0]]: propertyName[1].message,
     };
 
-    finalData.push(data);
+    eachItemArr.push(eachItem);
   });
 
-  return finalData;
+  return eachItemArr;
 };

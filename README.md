@@ -34,16 +34,19 @@ try {
 } catch (error) {
 
   console.log(error);
-  // CastError: Cast to ObjectId failed for value "625fe5714f9a33641027ed7" (type string) at path "_id" for model "User"
-  //     at model.Query.exec (D:\NodeJS\nodejs-app\node_modules\mongoose\lib\query.js:4715:21)
-  //     at model.Query.Query.then (D:\NodeJS\nodejs-app\node_modules\mongoose\lib\query.js:4814:15)
+  // Error: User validation failed: password: Please enter your password, age: Please enter your age, name: Please enter a name
+  //     at ValidationError.inspect (D:\NodeJS\nodejs-app\node_modules\mongoose\lib\error\validation.js:48:26)
+  //     at formatValue (node:internal/util/inspect:782:19)
+  //     at inspect (node:internal/util/inspect:347:10)
+  //     at formatWithOptionsInternal (node:internal/util/inspect:2167:40)
+  //     at formatWithOptions (node:internal/util/inspect:2029:10)
+  //     at console.value (node:internal/console/constructor:324:14)
+  //     at console.log (node:internal/console/constructor:360:61)
+  //     at D:\NodeJS\nodejs-app\server.js:46:13
   //     at processTicksAndRejections (node:internal/process/task_queues:96:5) {
-  //   messageFormat: undefined,
-  //   stringValue: '"625fe5714f9a33641027ed7"',
-  //   kind: 'ObjectId',
-  //   value: '625fe5714f9a33641027ed7',
-  //   path: '_id',
+  //   _message: 'User validation failed'
   // }
+
 
 
   console.log(mongoose_beautify(error));

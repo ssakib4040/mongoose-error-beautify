@@ -1,11 +1,30 @@
 {
   "name": "mongoose-error-beautify",
   "description": "A simple module to format mongoose errors with ease",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "main": "index.js",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/ssakib4040/mongoose-error-beautify.git"
+  },
+  "keywords": [
+    "mongodb",
+    "mongoose",
+    "mongoose error",
+    "mongoose error beautify",
+    "mongoose error format",
+    "mongoose error formatter",
+    "ValidationError",
+    "CastError",
+    "duplicate entry",
+    "object id error",
+    "A simple module to format mongoose errors with ease"
+  ],
+  "author": "Sadman Sakib",
+  "devDependencies": {
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mongoose": "^6.3.4"
   }
 }

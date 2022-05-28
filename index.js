@@ -1,44 +1,49 @@
 module.exports = function (errorFromMongoose = null) {
   if (!errorFromMongoose) return null;
 
-  // save document error
-  if (errorFromMongoose && errorFromMongoose.errors) {
-    const processMongooseErrors = JSON.parse(JSON.stringify(errorFromMongoose));
+  // parse mongoose errors
+  const processMongooseErrors = JSON.parse(JSON.stringify(errorFromMongoose));
 
-    const eachItemArr = [];
+  //  validation error
+  if (processMongooseErrors?.name == "ValidationError") {
+    const mongooseErrors = processMongooseErrors.errors;
 
-    const propertyNames = Object.entries(processMongooseErrors.errors);
+    var formattedError = [];
 
-    propertyNames.forEach((propertyName) => {
-      delete propertyName[1].properties;
-      delete propertyName[1].path;
-      delete propertyName[1].kind;
+    Object.keys(mongooseErrors).forEach(function (key) {
+      const newArr = mongooseErrors[key];
+      newArr.path = newArr?.properties?.path;
+      delete newArr.name;
+      delete newArr.properties;
+      delete newArr.kind;
 
-      const eachItem = {
-        [propertyName[0]]: propertyName[1].message,
-      };
+      formattedError.errorType = "ValidationError";
 
-      eachItemArr.push(eachItem);
+      formattedError.push(newArr);
     });
 
-    return eachItemArr;
+    return formattedError;
   }
 
-  // invalid object id detect
-  if (
-    errorFromMongoose &&
-    errorFromMongoose.message &&
-    errorFromMongoose.message.match(/Cast to ObjectId/i)
-  ) {
-    return { error: "Invalid object id" };
+  //  duplicate entry error
+  if (processMongooseErrors?.code == 11000) {
+    var formattedError = [];
+
+    formattedError.errorType = "DuplicateEntry";
+    formattedError.push(processMongooseErrors.keyValue);
+
+    return formattedError;
   }
 
-  // duplicate entry
-  if (
-    errorFromMongoose &&
-    errorFromMongoose.message &&
-    errorFromMongoose.message.match(/E11000/i)
-  ) {
-    return { error: "Duplicate entry" };
+  // invalid object id
+  if (processMongooseErrors?.name == "CastError") {
+    var formattedError = [];
+
+    formattedError.errorType = "CastError";
+    formattedError.push(processMongooseErrors);
+
+    return formattedError;
   }
+
+  return errorFromMongoose?.message;
 };
